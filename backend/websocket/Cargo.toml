@@ -1,0 +1,21 @@
+[package]
+name = "websocket"
+version = "0.1.0"
+edition = "2021"
+default-run = "client"
+
+
+[dependencies]
+tokio = { version = "1.39.2", features = ["full"] }
+futures = "0.3.30"
+tokio-tungstenite = "0.23.1"
+serde = { version = "1.0.188", features = ["derive"]}
+serde_json = "1.0.121"
+tokio-util = "=0.7.11"
+opcua_client = {path = "../opcua_client"}
+chrono = { version = "0.4.31", features = ["serde"]}
+AutoReagent = { version="0.1.0",path="../auto_reagent" }
+dotenvy = "0.15.7"
+
+[[bin]]
+name = "client"

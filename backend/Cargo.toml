@@ -1,0 +1,3 @@
+[workspace]
+members=[ "auto_reagent", "opcua_client","websocket"]
+resolver = "2"

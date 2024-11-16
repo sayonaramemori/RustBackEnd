@@ -1,0 +1,13 @@
+# Stage 1: Build the Rust project with musl for static linking
+FROM rust:latest as builder
+
+# Install musl-tools, pkg-config, and OpenSSL for musl
+# pkg-config libssl-dev | using rustls not naive ssl 
+RUN apt-get update && apt-get install -y musl-tools musl-dev 
+
+# Add the musl target for Rust
+RUN rustup target add x86_64-unknown-linux-musl
+
+# Set PKG_CONFIG_PATH for musl cross-compilation
+#ENV PKG_CONFIG_ALLOW_CROSS=1
+#ENV PKG_CONFIG_PATH=/usr/lib/x86_64-linux-musl/pkgconfig:/usr/share/pkgconfig
