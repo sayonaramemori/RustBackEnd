@@ -1,5 +1,6 @@
 use std::collections::HashMap;
-use sqlx::{any::AnyPoolOptions, Any, MySql, Pool,mysql::MySqlPoolOptions};
+
+use sqlx::{MySql, Pool,mysql::MySqlPoolOptions};
 
 #[derive(Clone,Debug,Default)]
 pub struct SqlxManager {
@@ -11,8 +12,6 @@ impl SqlxManager {
         SqlxManager { databases: HashMap::new() }
     }
     pub async fn add_database(&mut self,name: &str,url: String){
-        // let pool = AnyPoolOptions::new().connect(&url).await.unwrap();
-
         let pool = MySqlPoolOptions::new().connect(&url).await.unwrap();
         self.databases.insert(name.to_string(), pool);
     }

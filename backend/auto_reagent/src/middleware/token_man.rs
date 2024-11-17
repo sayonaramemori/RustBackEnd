@@ -26,6 +26,7 @@ impl TokenManager
         lazy_static!{
             static ref KEY: Arc<Hmac<Sha256>> = Arc::new(Hmac::new_from_slice(SECRETE).unwrap());
         }
+        // Only clonea a pointer
         TokenManager{
             key: Some(KEY.clone()),
         }
