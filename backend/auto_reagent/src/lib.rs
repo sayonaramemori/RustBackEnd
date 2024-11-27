@@ -1,7 +1,9 @@
-pub mod handlers;
-pub mod models;
+pub mod model;
 pub mod utility;
 pub mod middleware;
+pub mod interface;
+pub mod service;
+pub mod router;
 
 #[macro_export]
 macro_rules! debug_println {

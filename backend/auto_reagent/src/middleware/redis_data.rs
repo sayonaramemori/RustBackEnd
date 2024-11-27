@@ -25,7 +25,7 @@ impl RedisState {
 
     pub async fn get_auth_connection(&self) ->RedisResult<MultiplexedConnection> {
         let mut conn = self.redis_client.get_multiplexed_async_connection().await?;
-        redis::cmd("AUTH").arg(&self.redis_passwd).query_async(&mut conn).await?;
+        redis::cmd("AUTH").arg(&self.redis_passwd).query_async::<_,()>(&mut conn).await?;
         Ok(conn)
     }
 

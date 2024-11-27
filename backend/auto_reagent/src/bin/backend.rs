@@ -1,19 +1,27 @@
-use actix_web::{get, guard, web, App, Error, HttpRequest, HttpResponse, HttpServer};
+use actix_web::{web, App, HttpServer};
 use actix_cors::Cors;
 extern crate AutoReagent;
-use AutoReagent::handlers::{login::*,monitor::*,machine_panel::*,history_data::*,};
+use AutoReagent::router::login::*;
 use AutoReagent::middleware::{myws::{MyWs,websocket_index},redis_data::RedisState,sqlx_manager::SqlxManager};
 use actix::prelude::Addr;
 use std::sync::{RwLock,Arc};
+use AutoReagent::utility::{parameter::Args, config::Config};
+use clap::Parser;
 
 #[actix_web::main] // or #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    dotenvy::dotenv().unwrap();
-    let db_names = ["flux","fluxVice","plc"];
+    let paras = Args::parse();
+    let config_file = paras.config.as_ref();
+    let config = Config::init(config_file.expect("No such file for config initialization"));
+
     let mut sqlx_state = SqlxManager::new();
-    for name in db_names { sqlx_state.add_database(name, dotenvy::var(name).unwrap()).await; }
-    let redis_state= RedisState::new(dotenvy::var("REDIS_PASSWD").unwrap(), dotenvy::var("REDIS_URL").unwrap());
+    sqlx_state.add_databases(&config.database_url).await;
+    let redis_state= RedisState::new(config.redis_password, config.redis_url);
     let addr: Arc<RwLock<Vec<Addr<MyWs>>>> = Arc::new(RwLock::new(vec![]));
+    let port = config.port;
+    let host_mode = config.host;
+    println!("Application runs on {host_mode}:{port}");
+
     HttpServer::new(move || {
        let cors = Cors::default()
             .allow_any_origin()
@@ -33,25 +41,15 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(redis_state.clone()))
             .app_data(web::Data::new(addr.clone()))
             .wrap(cors)
-            .service(findlast)
-            .service(findlast_vice)
             .service(login)
-            .service(turbine_state)
             .service(check_privilege)
-            .service(main_history)
-            .service(vice_history)
-            .service(start_main)
-            .service(stop_main)
-            .service(start_vice)
-            .service(stop_vice)
-            .service(pump_status)
-            .service(set_point)
             .service(websocket_index)
+            .service(useradd)
+          
             // .service(send_instruction)
             // .default_service(web::to(|| HttpResponse::Ok()))
     })
-    // .bind("0.0.0.0:8080")?
-    .bind("localhost:8080")?
+    .bind(format!("{host_mode}:{port}"))?
     .run()
     .await
 }

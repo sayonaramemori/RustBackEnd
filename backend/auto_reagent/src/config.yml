@@ -1,0 +1,8 @@
+port: 8080
+host: "0.0.0.0"
+database_url:
+  flux: "mysql://root:121234@localhost:3000/flux?ssl-mode=DISABLED"
+  plc: "mysql://root:121234@localhost:3000/plc?ssl-mode=DISABLED"
+  fluxVice: "mysql://root:121234@localhost:3000/fluxVice?ssl-mode=DISABLED"
+redis_url: "redis://:Iloveyouxuwu121234@kazusa.vip"
+redis_password: "Iloveyouxuwu121234"

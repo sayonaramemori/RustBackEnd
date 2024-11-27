@@ -162,7 +162,7 @@ impl std::error::Error for MyErorr {
 ### Package and Module
 
 #### cargo  
-```rust
+```shell
 cargo clean //delete the target compiled  
 cargo test
 cargo run
@@ -210,6 +210,7 @@ use self::enum_type::*;
 #[cfg(target_os = "android")]
 mod mobile;
 ```
+
 #### test  
 > Normal functions marked with `#[test]`, run `cargo test`  
 ```rust
@@ -226,6 +227,7 @@ mod tests{
     }
 }
 ```
+
 #### workspace  
 ```rust
 cargo new project
@@ -695,6 +697,7 @@ s.pop()
 s.remove(i) //return the char deleted
 s.drain(range) //return the iterator and deleted it ele in the range when iterator is droped
 ```
+
 #### String Search  
 ```rust
 s.find(ch)
@@ -816,10 +819,7 @@ The type supported by `macro_rules!`
 |tt|token tree: ; >= {},[]|  
 
 
-
-
 ### Unsafe Code  
-
 
 
 

@@ -1,3 +1,5 @@
+/// Fix time with shanghai timezone.
+
 use lazy_static::lazy_static;
 use chrono::prelude::*;
 

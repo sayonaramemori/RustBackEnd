@@ -1,12 +1,28 @@
 use std::mem::swap;
+use clap::Parser;
+
+/// Converge line by line and output a csv file
+#[derive(Parser,Debug)]
+#[command(version, about, long_about=None)]
+struct Args {
+    /// File of the input
+    #[arg(short,long)]
+    first: String,
+
+    /// File of the second input
+    #[arg(short,long)]
+    second: String
+}
 
 fn main() {
-    //skip the file name
-    let mut i = std::env::args().skip(1);
-    let zh = i.next().unwrap();
-    let en = i.next().unwrap();
-    let mut zh = std::fs::read_to_string(zh).unwrap();
-    let mut en = std::fs::read_to_string(en).unwrap();
+    // Parse is needed for --help
+    let args = Args::parse();
+    let zh = args.first;
+    let en = args.second;
+    let err_zh = format!("No file named {zh}");
+    let err_en = format!("No file named {en}");
+    let mut zh = std::fs::read_to_string(zh).expect(&err_zh);
+    let mut en = std::fs::read_to_string(en).expect(&err_en);
     if !is_chinese(&zh){swap(&mut zh,&mut en);}
     let separator = "\t";
     let mut res = format!("zh{separator}en\n");
